@@ -19,11 +19,11 @@ public class ArtGeo extends JFrame{
 	
 	private JPanel mainMenuPane;
 	private JPanel toolsMenuPane;
+	private JPanel coordinatesPane;
 	
 	private static Font font;
 	
 	public ArtGeo(){
-		
 		
 		font = new Font("Ariel", Font.PLAIN, 16);
 		setUIFont(new FontUIResource(font));
@@ -32,7 +32,7 @@ public class ArtGeo extends JFrame{
 		mainMenuPane = new MainMenu(new BorderLayout());
 		toolsMenuPane = new ToolsMenu();
 		toolsMenuPane.setLayout(new BoxLayout(toolsMenuPane, BoxLayout.Y_AXIS));
-		
+		coordinatesPane = new CoordinatesSection();
 		setIconImage(appIcon.getImage());
 		setTitle("Endeavor");
 			
@@ -40,6 +40,7 @@ public class ArtGeo extends JFrame{
 		setMinimumSize(new Dimension(350,350));
 		getContentPane().add(mainMenuPane,BorderLayout.NORTH);
 		getContentPane().add(toolsMenuPane,BorderLayout.WEST);
+		getContentPane().add(coordinatesPane, BorderLayout.SOUTH);
 		setVisible(true);	
 		setResizable(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);		

@@ -1,13 +1,8 @@
 package core;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.LayoutManager;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
