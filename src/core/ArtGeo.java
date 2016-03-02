@@ -17,23 +17,31 @@ public class ArtGeo extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private ImageIcon appIcon;
 	
-	private JPanel menuPane;
+	private JPanel mainMenuPane;
+	private JPanel toolsMenuPane;
 	
 	private static Font font;
 	
 	public ArtGeo(){
 		
-		font = new Font("Ariel", Font.PLAIN, 16);
-		appIcon = new ImageIcon((URL)ArtGeo.class.getResource("/res/EndeavorIcon.png"));
-		menuPane = new MainMenu(new BorderLayout());
 		
+		font = new Font("Ariel", Font.PLAIN, 16);
 		setUIFont(new FontUIResource(font));
+		
+		appIcon = new ImageIcon((URL)ArtGeo.class.getResource("/res/EndeavorIcon.png"));
+		mainMenuPane = new MainMenu(new BorderLayout());
+		toolsMenuPane = new ToolsMenu();
+		toolsMenuPane.setLayout(new BoxLayout(toolsMenuPane, BoxLayout.Y_AXIS));
+		
 		setIconImage(appIcon.getImage());
 		setTitle("Endeavor");
-		
-		setSize(500, 500);	
-		getContentPane().add(menuPane,BorderLayout.NORTH);
+			
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setMinimumSize(new Dimension(350,350));
+		getContentPane().add(mainMenuPane,BorderLayout.NORTH);
+		getContentPane().add(toolsMenuPane,BorderLayout.WEST);
 		setVisible(true);	
+		setResizable(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);		
 	}
 	
