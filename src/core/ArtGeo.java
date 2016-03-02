@@ -1,13 +1,11 @@
 package core;
 
 import java.awt.*; //Using AWT containers and components
-import java.awt.event.*; //Using AWT events and listener interfaces
-import java.awt.geom.Line2D;
-import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 
-import javax.imageio.ImageIO;
 import javax.swing.*; //Using Swing components and containers
+import javax.swing.plaf.FontUIResource;
 
 //A Swing GUI app inherits from top-level container
 //javax.swing.JFrame
@@ -20,54 +18,36 @@ public class ArtGeo extends JFrame{
 	private ImageIcon appIcon;
 	
 	private JPanel menuPane;
-	private JMenuBar menuBar;
-	private JMenu fileMenu;
-	private JMenu helpMenu;
 	
-	private JMenuItem openFile;
-	private JMenuItem saveFile;
-	private JMenuItem clearAll;
-	private JMenuItem exit;
-	
-	private JMenuItem about;
+	private static Font font;
 	
 	public ArtGeo(){
 		
+		font = new Font("Ariel", Font.PLAIN, 16);
 		appIcon = new ImageIcon((URL)ArtGeo.class.getResource("/res/EndeavorIcon.png"));
+		menuPane = new MainMenu(new BorderLayout());
 		
-		menuPane = new JPanel(new BorderLayout());
-		menuBar = new JMenuBar();		
-		fileMenu = new JMenu("File");
-		helpMenu = new JMenu("Help");
-		
-		openFile = new JMenuItem("Open File");
-		saveFile = new JMenuItem("Save File");
-		clearAll = new JMenuItem("Clear All");
-		exit = new JMenuItem("Exit");
-		about = new JMenuItem("About");
-		
-		fileMenu.add(openFile);
-		fileMenu.add(saveFile);
-		fileMenu.addSeparator();
-		fileMenu.add(clearAll);
-		fileMenu.addSeparator();
-		fileMenu.add(exit);
-		
-		helpMenu.add(about);
-		
-		menuBar.add(fileMenu);
-		menuBar.add(helpMenu);
-		menuPane.setBackground(Color.WHITE);
-		menuPane.add(menuBar);
-		
-		
+		setUIFont(new FontUIResource(font));
 		setIconImage(appIcon.getImage());
 		setTitle("Endeavor");
+		
 		setSize(500, 500);	
 		getContentPane().add(menuPane,BorderLayout.NORTH);
 		setVisible(true);	
 		setDefaultCloseOperation(EXIT_ON_CLOSE);		
 	}
+	
+	public static void setUIFont(FontUIResource f) {
+		Enumeration<Object> keys = UIManager.getDefaults().keys();
+		while(keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if(value instanceof FontUIResource) {
+				UIManager.put(key, f);
+			}
+		}
+	}
+	
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -75,5 +55,7 @@ public class ArtGeo extends JFrame{
 				new ArtGeo();				
 			}
 		});
+		
+		
 	}
 }
