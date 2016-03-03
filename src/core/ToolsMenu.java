@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
@@ -24,17 +26,20 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	private JButton line;
 	private JButton rectangle;
 	private JButton circle;
+	private JButton polygon;
 	private JButton colorFill;
 	private JButton colorSelect;
+	private JLabel strokeSizeLabel;
 	
 	public static final String DOT = "dot";
 	public static final String LINE = "line"; 
 	public static final String RECTANGLE = "rectangle";
 	public static final String CIRCLE = "circle";
+	public static final String POLYGON = "polygon";
 	public static final String COLORFILL = "colorFill";
 	public static final String COLORSELECT = "colorSelect";
 	
-	private static String selectedChoice = null;
+	private static String selectedChoice = "none";
 	private static Vector<Integer> STROKESIZES;
 	
 	private static JComboBox<Integer> brushStrokeSize;
@@ -50,8 +55,12 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		line = getToolBoxButton(ToolsMenu.LINE);
 		rectangle = getToolBoxButton(ToolsMenu.RECTANGLE);
 		circle = getToolBoxButton(ToolsMenu.CIRCLE);
+		polygon = getToolBoxButton(ToolsMenu.POLYGON);
 		colorFill = getToolBoxButton(ToolsMenu.COLORFILL);
 		colorSelect = getToolBoxButton(ToolsMenu.COLORSELECT);	
+		
+		strokeSizeLabel = new JLabel("Size");
+		strokeSizeLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
 		brushStrokeSize = new JComboBox<Integer>(STROKESIZES);
 		brushStrokeSize.setSelectedIndex(0);
@@ -63,8 +72,10 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		toolBox.add(line);
 		toolBox.add(rectangle);
 		toolBox.add(circle);
+		toolBox.add(polygon);
 		toolBox.add(colorFill);
 		toolBox.add(colorSelect);
+		toolBox.add(strokeSizeLabel);
 		toolBox.add(brushStrokeSize);
 		
 		toolBox.setFloatable(false);
@@ -83,6 +94,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		ImageIcon selectedButtonIcon = new ImageIcon((URL)ToolsMenu.class.getResource(selectedIconPath));
 		
 		JButton button = new JButton(buttonIcon);
+		button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		button.setBackground(Color.WHITE);
 		button.setToolTipText(name);
 		button.addActionListener(this);
