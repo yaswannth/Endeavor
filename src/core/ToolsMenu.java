@@ -30,6 +30,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	private JButton colorFill;
 	private JButton colorSelect;
 	private JLabel strokeSizeLabel;
+	private JButton delete;
 	
 	public static final String DOT = "dot";
 	public static final String LINE = "line"; 
@@ -38,6 +39,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	public static final String POLYGON = "polygon";
 	public static final String COLORFILL = "colorFill";
 	public static final String COLORSELECT = "colorSelect";
+	public static final String DELETE = "delete";
 	
 	private static String selectedChoice = "none";
 	private static Vector<Integer> STROKESIZES;
@@ -57,7 +59,8 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		circle = getToolBoxButton(ToolsMenu.CIRCLE);
 		polygon = getToolBoxButton(ToolsMenu.POLYGON);
 		colorFill = getToolBoxButton(ToolsMenu.COLORFILL);
-		colorSelect = getToolBoxButton(ToolsMenu.COLORSELECT);	
+		colorSelect = getToolBoxButton(ToolsMenu.COLORSELECT);
+		delete = getToolBoxButton(ToolsMenu.DELETE);
 		
 		strokeSizeLabel = new JLabel("Size");
 		strokeSizeLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -75,6 +78,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		toolBox.add(polygon);
 		toolBox.add(colorFill);
 		toolBox.add(colorSelect);
+		toolBox.add(delete);
 		toolBox.add(strokeSizeLabel);
 		toolBox.add(brushStrokeSize);
 		

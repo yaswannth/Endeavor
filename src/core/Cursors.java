@@ -18,6 +18,7 @@ public class Cursors {
 	private Cursor polygonCursor;
 	private Cursor colorFillCursor;
 	private Cursor colorSelectCursor;
+	private Cursor deleteCursor;
 	
 	public static Cursor currentCursor;
 	public static HashMap<String, Cursor> cursorMap = new HashMap<String, Cursor>();
@@ -31,6 +32,7 @@ public class Cursors {
 		polygonCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
 		colorFillCursor = createCustomCursor("colorFill");
 		colorSelectCursor = createCustomCursor("colorSelect");
+		deleteCursor = createCustomCursor("delete");
 		
 		cursorMap.put(ToolsMenu.DOT, dotCursor);
 		cursorMap.put(ToolsMenu.LINE, lineCursor);
@@ -39,6 +41,7 @@ public class Cursors {
 		cursorMap.put(ToolsMenu.POLYGON, polygonCursor);
 		cursorMap.put(ToolsMenu.COLORFILL, colorFillCursor);
 		cursorMap.put(ToolsMenu.COLORSELECT, colorSelectCursor);
+		cursorMap.put(ToolsMenu.DELETE, deleteCursor);
 		
 	}
 	

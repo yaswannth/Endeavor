@@ -1,10 +1,11 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Shapes {
-	public ArrayList<Vertex> vertices;
+	public HashSet<Vertex> vertices;
 	public Shapes() {
-		vertices = new ArrayList<Vertex>();
+		vertices = new HashSet<Vertex>();
 	}
 }
