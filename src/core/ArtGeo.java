@@ -34,7 +34,7 @@ public class ArtGeo extends JFrame{
 		toolsMenuPane = new ToolsMenu();
 		toolsMenuPane.setLayout(new BoxLayout(toolsMenuPane, BoxLayout.Y_AXIS));
 		coordinatesPane = new CoordinatesSection();
-		canvasPane = new Canvas(coordinatesPane);
+		canvasPane = new Canvas();
 		
 		setIconImage(appIcon.getImage());
 		setTitle("Endeavor");

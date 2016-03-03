@@ -14,7 +14,7 @@ public class CoordinatesSection extends JPanel {
 	 */
 	private static final long serialVersionUID = -2446278368202616149L;
 	
-	private JLabel coords;
+	private static JLabel coords;
 	
 	public CoordinatesSection (){
 		super(new BorderLayout());
@@ -25,7 +25,7 @@ public class CoordinatesSection extends JPanel {
 		this.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 	}
 	
-	public void displayCoords(int x, int y){		
+	public static void displayCoords(int x, int y){		
 		coords.setText("X : " + x + ", Y : " + y);		
 	}
 
