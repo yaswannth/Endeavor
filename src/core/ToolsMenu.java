@@ -2,6 +2,7 @@ package core;
 
 import java.awt.Color;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -64,6 +65,7 @@ public class ToolsMenu extends JPanel{
 		toolsMenu.setBorderPainted(false);
 		
 		this.add(toolsMenu);
+		this.setBorder(BorderFactory.createEtchedBorder());
 		this.setSize(192, 32);
 		
 	}

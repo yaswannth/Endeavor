@@ -21,16 +21,14 @@ public class CoordinatesSection extends JPanel {
 	public CoordinatesSection (){
 		super(new BorderLayout());
 		coords = new JLabel("X : 0, Y : 0");
+		
 		this.add(coords, BorderLayout.WEST);
-		
-		this.addMouseMotionListener(new MouseMotionAdapter() {
-			public void mouseMoved(MouseEvent e) {
-				coords.setText("X : " + e.getX() + ", Y : " + e.getY());
-			}
-		});
-		
 		this.setBackground(Color.WHITE);
 		this.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+	}
+	
+	public void displayCoords(int x, int y){		
+		coords.setText("X : " + x + ", Y : " + y);		
 	}
 
 }
