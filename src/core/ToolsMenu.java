@@ -73,7 +73,8 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		brushStrokeSize.addActionListener(this);
 		brushStrokeSize.setMaximumSize(new Dimension(52, 52));
 		brushStrokeSize.setAlignmentX(CENTER_ALIGNMENT);
-				
+			
+		toolBox.add(grab);
 		toolBox.add(dot);
 		toolBox.add(line);
 		toolBox.add(rectangle);
@@ -87,11 +88,9 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		
 		toolBox.setFloatable(false);
 		toolBox.setBorderPainted(false);
-		//toolBox.setSize(224, 32);
 		
 		this.add(toolBox);
-		this.setBorder(BorderFactory.createEtchedBorder());
-		this.setMaximumSize(new Dimension(36,this.getHeight()));		
+		this.setBorder(BorderFactory.createEtchedBorder());	
 	}
 	
 	private JButton getToolBoxButton(String name) {		
@@ -108,7 +107,6 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		button.setActionCommand(name);
 		button.setPressedIcon(selectedButtonIcon);
 		button.setAlignmentX(CENTER_ALIGNMENT);
-		//button.setSelectedIcon(selectedButtonIcon);
 		return button;
 	}
 
