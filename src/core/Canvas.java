@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.AWTException;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.HeadlessException;
@@ -23,6 +24,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private Point endPoint;
 	private DrawnObjects drawnObjects;
 	private String selectedTool;
+	private Color c = Color.BLACK;
 
 	public Canvas(){
 
@@ -53,7 +55,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	public void mouseClicked(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
 		selectedTool = ToolsMenu.getSelectedChoice();
-		if(selectedTool.equals(ToolsMenu.LINE)) {
+		if(selectedTool.equals(ToolsMenu.DOT)) {
+			Vertex vertex = new Vertex(startPoint,c);
+			drawnObjects.shapes.add(vertex);
+		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 
@@ -129,22 +134,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		selectedTool = ToolsMenu.getSelectedChoice();
-		if(selectedTool.equals(ToolsMenu.DOT)) {
-			
-		}else if(selectedTool.equals(ToolsMenu.LINE)) {
-			
-		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
-
-		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
-
-		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
-
-		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
-
-		}else if(selectedTool.equals(ToolsMenu.COLORSELECT)) {
-
-		}else if(selectedTool.equals(ToolsMenu.DELETE)) {
-			
+		for(Shape s : drawnObjects.shapes){
+			s.draw(g);
 		}
 	}
 

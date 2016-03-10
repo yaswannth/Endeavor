@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,9 +14,9 @@ public class Vertex implements Shape{
 	Color c;
 	int id;
 	int type;
+	private int r = 6;
 	
 	public Vertex(Point p, Color c) {
-		vertexPoints.add(p);
 		this.x = p.x;
 		this.y = p.y;
 		this.c = c;
@@ -24,14 +25,13 @@ public class Vertex implements Shape{
 	}
 	
 	@Override
-	public void setColor(Color c) {
-		this.c = c;
+	public void draw(Graphics g){
+		g.fillOval(this.x - r, this.y - r, 2*r, 2*r);		
 	}
 	
 	@Override
-	public void setVertices(HashSet<Point> vertices) {
-		vertexPoints.clear();
-		vertexPoints.addAll(vertices);
+	public void setColor(Color c) {
+		this.c = c;
 	}
 	
 	@Override
