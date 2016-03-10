@@ -9,4 +9,6 @@ public interface Shape {
 	public void setColor(Color c);
 	public void setVertices(HashSet<Point> vertices);
 	public int getId();
+	public int getType();
+	public Color getColor();
 }

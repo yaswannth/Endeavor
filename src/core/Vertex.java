@@ -12,6 +12,7 @@ public class Vertex implements Shape{
 	public int y;
 	Color c;
 	int id;
+	int type;
 	
 	public Vertex(Point p, Color c) {
 		vertexPoints.add(p);
@@ -19,6 +20,7 @@ public class Vertex implements Shape{
 		this.y = p.y;
 		this.c = c;
 		id = nextId.incrementAndGet();
+		type = DrawnObjects.DOT;
 	}
 	
 	@Override
@@ -34,7 +36,17 @@ public class Vertex implements Shape{
 	
 	@Override
 	public int getId(){
-		return id;
+		return this.id;
 	}	
+	
+	@Override
+	public int getType(){
+		return this.type;
+	}
+	
+	@Override
+	public Color getColor(){
+		return this.c;
+	}
 	
 }

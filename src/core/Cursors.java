@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 public class Cursors {
 	
 	private Cursor grabCursor;
+	private Cursor grabPressedCursor;
 	private Cursor dotCursor;
 	private Cursor lineCursor;
 	private Cursor rectangleCursor;
@@ -27,6 +28,7 @@ public class Cursors {
 	public Cursors() {
 
 		grabCursor = createCustomCursor("grab");
+		grabPressedCursor = createCustomCursor("grabPressed");
 		dotCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 		lineCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
 		rectangleCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);		
@@ -37,6 +39,7 @@ public class Cursors {
 		deleteCursor = createCustomCursor("delete");
 		
 		cursorMap.put(ToolsMenu.GRAB, grabCursor);
+		cursorMap.put("grabPressed", grabPressedCursor);
 		cursorMap.put(ToolsMenu.DOT, dotCursor);
 		cursorMap.put(ToolsMenu.LINE, lineCursor);
 		cursorMap.put(ToolsMenu.RECTANGLE, rectangleCursor);
