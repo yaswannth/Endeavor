@@ -17,13 +17,13 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
 	private Point startPoint;
 	private Point endPoint;
-	private Shapes shapes;
+	private DrawnObjects drawnObjects;
 
 	public Canvas(){
 
 		super();
 		new Cursors();
-		shapes = new Shapes();
+		drawnObjects = new DrawnObjects();
 		System.out.println("Created");
 		
 		addMouseMotionListener(this);
@@ -50,12 +50,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		startPoint = new Point(event.getX(), event.getY());
 		String selectedTool = ToolsMenu.getSelectedChoice();
 		if(selectedTool.equals(ToolsMenu.DOT)) {
-			shapes.vertices.add(new Vertex(startPoint));
+			drawnObjects.vertices.add(new Vertex(startPoint));
 		}else if(selectedTool.equals(ToolsMenu.DELETE)) {
 			Vertex selectedPoint = getSelectedPoint(event.getX(),event.getY());
-			System.out.println(shapes.vertices.size());
+			System.out.println(drawnObjects.vertices.size());
 			if(selectedPoint != null) {
-				shapes.vertices.remove(selectedPoint);
+				drawnObjects.vertices.remove(selectedPoint);
 			}
 		}
 		repaint();
@@ -64,7 +64,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private Vertex getSelectedPoint(int x, int y) {
 		int min = Integer.MAX_VALUE;
 		Vertex q = null;
-		for (Vertex p : shapes.vertices) {
+		for (Vertex p : drawnObjects.vertices) {
 			int d = dist2(p.x, p.y, x, y);
 			if (min > d) {
 				min = d;
@@ -137,7 +137,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		String selectedTool = ToolsMenu.getSelectedChoice();
 		if(selectedTool.equals(ToolsMenu.DOT)) {
 			int r = Canvas.NODE_RADIUS;			
-			for(Vertex vertex : shapes.vertices){
+			for(Vertex vertex : drawnObjects.vertices){
 				g.fillOval(vertex.x - r, vertex.y - r, r*2,r*2);
 			}
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
@@ -154,7 +154,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
 		}else if(selectedTool.equals(ToolsMenu.DELETE)) {
 			int r = Canvas.NODE_RADIUS;			
-			for(Vertex vertex : shapes.vertices){
+			for(Vertex vertex : drawnObjects.vertices){
 				g.fillOval(vertex.x - r, vertex.y - r, r*2,r*2);
 			}
 		}

@@ -3,9 +3,9 @@ package core;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class Shapes {
+public class DrawnObjects {
 	public HashSet<Vertex> vertices;
-	public Shapes() {
+	public DrawnObjects() {
 		vertices = new HashSet<Vertex>();
 	}
 }

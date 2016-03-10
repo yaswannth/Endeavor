@@ -22,6 +22,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	 */
 	private static final long serialVersionUID = -4100870954459822323L;
 	private JToolBar toolBox;
+	private JButton grab;
 	private JButton dot;
 	private JButton line;
 	private JButton rectangle;
@@ -32,6 +33,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	private JLabel strokeSizeLabel;
 	private JButton delete;
 	
+	public static final String GRAB = "grab";
 	public static final String DOT = "dot";
 	public static final String LINE = "line"; 
 	public static final String RECTANGLE = "rectangle";
@@ -53,6 +55,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		
 		toolBox = new JToolBar("Tools",JToolBar.VERTICAL);
 			
+		grab = getToolBoxButton(ToolsMenu.GRAB);
 		dot = getToolBoxButton(ToolsMenu.DOT);
 		line = getToolBoxButton(ToolsMenu.LINE);
 		rectangle = getToolBoxButton(ToolsMenu.RECTANGLE);
