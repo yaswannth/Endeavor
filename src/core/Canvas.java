@@ -27,7 +27,8 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private String selectedTool;
 	public static Color c;
 	private Shape selectedShape;
-	private boolean movingObject = false;
+	private static boolean movingObject = false;
+	private static boolean drawingObject = false;
 	
 	public Canvas(){
 
@@ -89,7 +90,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			drawnObjects.shapes.remove(selectedShape);			
 			movingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
-			
+			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
@@ -108,8 +109,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		currentPoint = new Point(event.getX(), event.getY());
 		if(movingObject && selectedShape != null){	
 			selectedShape.moveTo(currentPoint);
-			repaint();
+			
 		}
+		repaint();
 	}
 
 	@Override
@@ -120,8 +122,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			drawnObjects.shapes.add(selectedShape);
 			this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
 			selectedShape = null;
+			movingObject = false;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
-			
+			drawingObject = false;
+			Line line = new Line(startPoint, endPoint, c);
+			drawnObjects.shapes.add(line);
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
@@ -145,10 +150,15 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
+		selectedTool = ToolsMenu.getSelectedChoice();
 		if(selectedShape != null)
 			selectedShape.draw(g);
 		for(Shape s : drawnObjects.shapes){
 			s.draw(g);
+		}
+		
+		if(this.drawingObject && selectedTool.equals(ToolsMenu.LINE)) {
+			Line.drawLine(startPoint, currentPoint, Canvas.c, g);
 		}
 	}
 }
