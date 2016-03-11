@@ -25,7 +25,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private Point endPoint;
 	private DrawnObjects drawnObjects;
 	private String selectedTool;
-	private Color c = Color.BLACK;
+	public static Color c;
 	private Shape selectedShape;
 	private boolean movingObject = false;
 	
@@ -33,6 +33,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
 		super();
 		new Cursors();
+		Canvas.c = Color.BLACK;
 		drawnObjects = new DrawnObjects();
 		System.out.println("Created");
 		
@@ -98,7 +99,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
 
 		}else if(selectedTool.equals(ToolsMenu.COLORSELECT)) {
-
+			
 		}
 	}
 	

@@ -35,7 +35,7 @@ public class Cursors {
 		circleCursor = createCustomCursor("circle");
 		polygonCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
 		colorFillCursor = createCustomCursor("colorFill");
-		colorSelectCursor = createCustomCursor("colorSelect");
+		colorSelectCursor = Cursor.getDefaultCursor();//createCustomCursor("colorSelect");
 		deleteCursor = createCustomCursor("delete");
 		
 		cursorMap.put(ToolsMenu.GRAB, grabCursor);

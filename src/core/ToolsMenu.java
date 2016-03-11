@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -114,6 +115,10 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		String command = event.getActionCommand();
 	    setSelectedChoice(command);
+	    if(command.equals("colorSelect")){
+	    	Color newColor = JColorChooser.showDialog(null, "Choose a color", Canvas.c);
+            Canvas.c = newColor;
+	    }
 	}
 	
 	private static void setSelectedChoice(String choice){

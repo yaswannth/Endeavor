@@ -26,6 +26,7 @@ public class Vertex implements Shape{
 	
 	@Override
 	public void draw(Graphics g){
+		g.setColor(this.c);
 		g.fillOval(this.x - r, this.y - r, 2*r, 2*r);		
 	}
 	
