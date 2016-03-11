@@ -30,6 +30,22 @@ public class Vertex implements Shape{
 	}
 	
 	@Override
+	public void moveTo(Point p) {
+		this.x = p.x;
+		this.y = p.y;
+	}
+	
+	@Override
+	public double getDist(Point p) {
+		int x1 = this.x;
+		int x2 = p.x;
+		int y1 = this.y;
+		int y2 = p.y;
+		double dist = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+		return dist;
+	}
+	
+	@Override
 	public void setColor(Color c) {
 		this.c = c;
 	}

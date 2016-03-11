@@ -21,11 +21,14 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private static final int NODE_RADIUS = 7;
 
 	private Point startPoint;
+	private Point currentPoint;
 	private Point endPoint;
 	private DrawnObjects drawnObjects;
 	private String selectedTool;
 	private Color c = Color.BLACK;
-
+	private Shape selectedShape;
+	private boolean movingObject = false;
+	
 	public Canvas(){
 
 		super();
@@ -81,6 +84,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		
 		if(selectedTool.equals(ToolsMenu.GRAB)) {
 			this.setCursor(Cursors.getCurrentCursor("grabPressed"));
+			selectedShape = drawnObjects.getNearestObjects(startPoint);
+			drawnObjects.shapes.remove(selectedShape);			
+			movingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
@@ -97,17 +103,22 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	}
 	
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	public void mouseDragged(MouseEvent event) {
+		currentPoint = new Point(event.getX(), event.getY());
+		if(movingObject && selectedShape != null){	
+			selectedShape.moveTo(currentPoint);
+			repaint();
+		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent event) {
+	public void mouseReleased(MouseEvent event) {		
 		endPoint = new Point(event.getX(), event.getY());
 		selectedTool = ToolsMenu.getSelectedChoice();
-		if(selectedTool.equals(ToolsMenu.GRAB)) {
+		if(movingObject) {
+			drawnObjects.shapes.add(selectedShape);
 			this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
+			selectedShape = null;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
@@ -133,10 +144,10 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		selectedTool = ToolsMenu.getSelectedChoice();
+		if(selectedShape != null)
+			selectedShape.draw(g);
 		for(Shape s : drawnObjects.shapes){
 			s.draw(g);
 		}
 	}
-
 }

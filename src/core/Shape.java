@@ -3,7 +3,6 @@ package core;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.HashSet;
 
 public interface Shape {
 	
@@ -12,4 +11,6 @@ public interface Shape {
 	public int getType();
 	public Color getColor();
 	public void draw(Graphics g);
+	public double getDist(Point p);
+	public void moveTo(Point p);
 }
