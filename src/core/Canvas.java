@@ -92,7 +92,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
-
+			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
@@ -128,7 +128,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			Line line = new Line(startPoint, endPoint, c);
 			drawnObjects.shapes.add(line);
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
-
+			drawingObject = false;
+			Rectangle rectangle = new Rectangle(startPoint, endPoint, c);
+			drawnObjects.shapes.add(rectangle);
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
@@ -157,8 +159,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			s.draw(g);
 		}
 		
-		if(this.drawingObject && selectedTool.equals(ToolsMenu.LINE)) {
+		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.LINE)) {
 			Line.drawLine(startPoint, currentPoint, Canvas.c, g);
+		}
+		
+		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.RECTANGLE)) {
+			Rectangle.drawRectangle(startPoint, currentPoint, Canvas.c, g);
 		}
 	}
 }
