@@ -31,9 +31,12 @@ public class Vertex implements Shape{
 	}
 	
 	@Override
-	public void moveTo(Point p) {
-		this.x = p.x;
-		this.y = p.y;
+	public void moveTo(Point p1, Point p2) {
+		int xdiff = p2.x - p1.x;
+		int ydiff = p2.y - p1.y;
+		
+		this.x = this.x + xdiff;
+		this.y = this.y + ydiff;
 	}
 	
 	@Override

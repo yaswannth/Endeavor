@@ -32,6 +32,9 @@ public class DrawnObjects {
 			}
 			idx++;
 		}
-		return shapes.get(requiredIdx);
+		if(minDist <= 30)
+			return shapes.get(requiredIdx);
+		else
+			return null;
 	}
 }

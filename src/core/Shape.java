@@ -12,5 +12,5 @@ public interface Shape {
 	public Color getColor();
 	public void draw(Graphics g);
 	public double getDist(Point p);
-	public void moveTo(Point p);
+	public void moveTo(Point p1, Point p2);
 }

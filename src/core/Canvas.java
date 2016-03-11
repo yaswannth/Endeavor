@@ -21,7 +21,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private static final int NODE_RADIUS = 7;
 
 	private Point startPoint;
-	private Point currentPoint;
+	private Point currentPoint = null;
 	private Point endPoint;
 	private DrawnObjects drawnObjects;
 	private String selectedTool;
@@ -29,7 +29,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private Shape selectedShape;
 	private static boolean movingObject = false;
 	private static boolean drawingObject = false;
-	
+
 	public Canvas(){
 
 		super();
@@ -37,12 +37,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		Canvas.c = Color.BLACK;
 		drawnObjects = new DrawnObjects();
 		System.out.println("Created");
-		
+
 		addMouseMotionListener(this);
 		addMouseListener(this);	
 	}
 
-	
+
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		selectedTool = ToolsMenu.getSelectedChoice();
@@ -50,9 +50,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	}	
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		int x = e.getX();
-		int y = e.getY();
+	public void mouseMoved(MouseEvent event) {
+		int x = event.getX();
+		int y = event.getY();
 		CoordinatesSection.displayCoords(x,y);		
 	}
 
@@ -63,8 +63,9 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		if(selectedTool.equals(ToolsMenu.DOT)) {
 			Vertex vertex = new Vertex(startPoint,c);
 			drawnObjects.shapes.add(vertex);
+			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
-			
+
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
@@ -78,17 +79,21 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}
 		repaint();
 	}
-	
+
 	@Override
 	public void mousePressed(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
 		selectedTool = ToolsMenu.getSelectedChoice();
-		
 		if(selectedTool.equals(ToolsMenu.GRAB)) {
 			this.setCursor(Cursors.getCurrentCursor("grabPressed"));
-			selectedShape = drawnObjects.getNearestObjects(startPoint);
-			drawnObjects.shapes.remove(selectedShape);			
-			movingObject = true;
+			selectedShape = drawnObjects.getNearestObjects(startPoint);			
+			currentPoint = null;
+			if(selectedShape != null){
+				drawnObjects.shapes.remove(selectedShape);			
+				movingObject = true;
+			}else{
+				this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
+			}
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
@@ -100,16 +105,24 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
 
 		}else if(selectedTool.equals(ToolsMenu.COLORSELECT)) {
-			
+
 		}
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent event) {
-		currentPoint = new Point(event.getX(), event.getY());
-		if(movingObject && selectedShape != null){	
-			selectedShape.moveTo(currentPoint);
-			
+		int x = event.getX();
+		int y = event.getY();
+		CoordinatesSection.displayCoords(x,y);	
+
+		Point previousPoint = startPoint;
+
+		if(currentPoint != null)
+			previousPoint = currentPoint;
+
+		currentPoint = new Point(x,y);
+		if(movingObject && selectedShape != null){				
+			selectedShape.moveTo(previousPoint, currentPoint);			
 		}
 		repaint();
 	}
@@ -123,18 +136,23 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
 			selectedShape = null;
 			movingObject = false;
+			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			drawingObject = false;
 			Line line = new Line(startPoint, endPoint, c);
 			drawnObjects.shapes.add(line);
+			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 			drawingObject = false;
 			Rectangle rectangle = new Rectangle(startPoint, endPoint, c);
 			drawnObjects.shapes.add(rectangle);
+			System.out.println(rectangle.x1 + " " + rectangle.y1 + " - " + rectangle.x2 + " " + rectangle.y2);
+			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
 			drawingObject = false;
 			Circle circle = new Circle(startPoint, endPoint, c);
 			drawnObjects.shapes.add(circle);
+			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
 
 		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
@@ -144,13 +162,13 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}
 		this.repaint();
 	}
-	
+
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -160,15 +178,15 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		for(Shape s : drawnObjects.shapes){
 			s.draw(g);
 		}
-		
+
 		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.LINE)) {
 			Line.drawLine(startPoint, currentPoint, Canvas.c, g);
 		}
-		
+
 		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.RECTANGLE)) {
 			Rectangle.drawRectangle(startPoint, currentPoint, Canvas.c, g);
 		}
-		
+
 		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.CIRCLE)) {
 			Circle.drawCircle(startPoint, currentPoint, Canvas.c, g);
 		}

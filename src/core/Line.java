@@ -33,18 +33,24 @@ public class Line implements Shape{
 	@Override
 	public void draw(Graphics g){
 		g.setColor(this.c);
-		g.drawLine(x1, y1, x2, y2);	
+		g.drawLine(this.x1, this.y1, this.x2, this.y2);	
 	}
 	
 	@Override
-	public void moveTo(Point p) {
+	public void moveTo(Point p1, Point p2) {
+		int xdiff = p2.x - p1.x;
+		int ydiff = p2.y - p1.y;
 		
+		this.x1 = this.x1 + xdiff;
+		this.x2 = this.x2 + xdiff;
+		this.y1 = this.y1 + ydiff;
+		this.y2 = this.y2 + ydiff;
 	}
 	
 	@Override
 	public double getDist(Point p) {
 		double numer = Math.abs((this.x2 - this.x1)*(this.y1 - p.y) - (this.y2 - this.y1)*(this.x1 - p.x));
-		double denom = Math.sqrt((x2-x1)^2 + (y2-y1)^2);
+		double denom = Math.sqrt((this.x1-this.x2)* (this.x1-this.x2)+ (this.y1-this.y2)*(this.y1-this.y2));
 		double dist;
 		if(denom != 0)
 			dist = numer/denom;

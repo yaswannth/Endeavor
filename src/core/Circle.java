@@ -49,8 +49,17 @@ public class Circle implements Shape {
 	}
 	
 	@Override
-	public void moveTo(Point p) {
+	public void moveTo(Point p1, Point p2) {
+		int xdiff = p2.x - p1.x;
+		int ydiff = p2.y - p1.y;
 		
+		this.x1 = this.x1 + xdiff;
+		this.x2 = this.x2 + xdiff;
+		this.y1 = this.y1 + ydiff;
+		this.y2 = this.y2 + ydiff;
+		
+		this.x = this.x + xdiff;
+		this.y = this.y + ydiff;
 	}
 	
 	@Override
@@ -58,7 +67,7 @@ public class Circle implements Shape {
 		int x = p.x;
 		int y = p.y;
 		double dist = Math.sqrt((this.x1-x)*(this.x1-x) + (this.y1-y)*(this.y1-y));
-		return dist;
+		return Math.abs(r - dist);
 	}
 	
 	@Override
