@@ -1,14 +1,12 @@
 package core;
 
-import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -18,17 +16,20 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	 * 
 	 */
 	private static final long serialVersionUID = -6762936064655965702L;
-	private static final int NODE_RADIUS = 7;
 
 	private Point startPoint;
 	private Point currentPoint = null;
-	private Point endPoint;
+	//private Point endPoint;
 	private DrawnObjects drawnObjects;
 	private String selectedTool;
 	public static Color c;
 	private Shape selectedShape;
 	private static boolean movingObject = false;
 	private static boolean drawingObject = false;
+	private ArrayList<Integer> xArray = new ArrayList<Integer>();
+	private ArrayList<Integer> yArray = new ArrayList<Integer>();
+	private ArrayList<Integer> tmpXArray = new ArrayList<Integer>();
+	private ArrayList<Integer> tmpYArray = new ArrayList<Integer>();
 
 	public Canvas(){
 
@@ -46,7 +47,18 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		selectedTool = ToolsMenu.getSelectedChoice();
-		setCursor(Cursors.getCurrentCursor(selectedTool));			
+		setCursor(Cursors.getCurrentCursor(selectedTool));
+		
+		if(!selectedTool.equals(ToolsMenu.POLYGON)) {
+			if(!xArray.isEmpty()){
+				Polygon polygon = new Polygon(xArray, yArray, c);
+				drawnObjects.shapes.add(polygon);
+				xArray.clear();
+				yArray.clear();
+				drawingObject = false;
+			}				
+		}
+		
 	}	
 
 	@Override
@@ -59,11 +71,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	@Override
 	public void mouseClicked(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
-		selectedTool = ToolsMenu.getSelectedChoice();
+		selectedTool = ToolsMenu.getSelectedChoice();		
+		
 		if(selectedTool.equals(ToolsMenu.DOT)) {
 			Vertex vertex = new Vertex(startPoint,c);
 			drawnObjects.shapes.add(vertex);
-			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
@@ -84,6 +96,12 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	public void mousePressed(MouseEvent event) {
 		startPoint = new Point(event.getX(), event.getY());
 		selectedTool = ToolsMenu.getSelectedChoice();
+		
+		if(!selectedTool.equals(ToolsMenu.POLYGON)){
+			xArray.clear();
+			yArray.clear();
+		}
+		
 		if(selectedTool.equals(ToolsMenu.GRAB)) {
 			this.setCursor(Cursors.getCurrentCursor("grabPressed"));
 			selectedShape = drawnObjects.getNearestObjects(startPoint);			
@@ -101,7 +119,11 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
 			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
-
+			if(xArray.isEmpty()){
+				xArray.add(new Integer(startPoint.x));
+				yArray.add(new Integer(startPoint.y));
+			}
+			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
 
 		}else if(selectedTool.equals(ToolsMenu.COLORSELECT)) {
@@ -129,32 +151,28 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
 	@Override
 	public void mouseReleased(MouseEvent event) {		
-		endPoint = new Point(event.getX(), event.getY());
+		currentPoint = new Point(event.getX(), event.getY());
 		selectedTool = ToolsMenu.getSelectedChoice();
 		if(movingObject) {
 			drawnObjects.shapes.add(selectedShape);
 			this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
 			selectedShape = null;
 			movingObject = false;
-			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			drawingObject = false;
-			Line line = new Line(startPoint, endPoint, c);
+			Line line = new Line(startPoint, currentPoint, c);
 			drawnObjects.shapes.add(line);
-			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 			drawingObject = false;
-			Rectangle rectangle = new Rectangle(startPoint, endPoint, c);
+			Rectangle rectangle = new Rectangle(startPoint, currentPoint, c);
 			drawnObjects.shapes.add(rectangle);
-			System.out.println(rectangle.x1 + " " + rectangle.y1 + " - " + rectangle.x2 + " " + rectangle.y2);
-			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.CIRCLE)) {
 			drawingObject = false;
-			Circle circle = new Circle(startPoint, endPoint, c);
+			Circle circle = new Circle(startPoint, currentPoint, c);
 			drawnObjects.shapes.add(circle);
-			currentPoint = null;
 		}else if(selectedTool.equals(ToolsMenu.POLYGON)) {
-
+			xArray.add(new Integer(currentPoint.x));
+			yArray.add(new Integer(currentPoint.y));	
 		}else if(selectedTool.equals(ToolsMenu.COLORFILL)) {
 
 		}else if(selectedTool.equals(ToolsMenu.COLORSELECT)) {
@@ -189,6 +207,20 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 
 		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.CIRCLE)) {
 			Circle.drawCircle(startPoint, currentPoint, Canvas.c, g);
+		}
+		
+		if(Canvas.drawingObject && selectedTool.equals(ToolsMenu.POLYGON)) {
+			if(xArray.size() == 1){
+				Line.drawLine(startPoint, currentPoint, Canvas.c, g);
+			}else {
+				tmpXArray.addAll(xArray);
+				tmpYArray.addAll(yArray);
+				tmpXArray.add(new Integer(currentPoint.x));
+				tmpYArray.add(new Integer(currentPoint.y));
+				Polygon.drawPolygon(tmpXArray, tmpYArray, Canvas.c, g);
+				tmpXArray.clear();
+				tmpYArray.clear();
+			}
 		}
 	}
 }

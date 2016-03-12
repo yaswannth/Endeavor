@@ -98,11 +98,6 @@ public class Rectangle implements Shape{
 	public Color getColor(){
 		return this.c;
 	}
-	
-	public static void drawLine(Point p1, Point p2, Color c2, Graphics g){
-		g.setColor(c2);
-		g.drawLine(p1.x, p1.y, p2.x, p2.y);
-	}
 
 	public static void drawRectangle(Point p1, Point p2, Color c2, Graphics g) {
 		int x1 = p1.x;
