@@ -22,8 +22,9 @@ public class Rectangle implements Shape{
 	Color c;
 	int id;
 	int type;
+	String bodyType;
 	
-	public Rectangle(Point s, Point e, Color c) {
+	public Rectangle(Point s, Point e, Color c, String bodyType) {
 		this.x1 = s.x;
 		this.y1 = s.y;
 		
@@ -41,12 +42,17 @@ public class Rectangle implements Shape{
 		this.c = c;
 		id = nextId.incrementAndGet();
 		type = DrawnObjects.RECTANGLE;
+		this.bodyType = bodyType;
 	}
 	
 	@Override
 	public void draw(Graphics g){
 		g.setColor(this.c);
-		g.drawRect(this.x, this.y, this.width, this.height);
+		
+		if(bodyType.equals(ToolsMenu.OUTLINE))
+			g.drawRect(x, y, width, height);
+		else
+			g.fillRect(x, y, width, height);		
 	}
 	
 	@Override
@@ -99,7 +105,7 @@ public class Rectangle implements Shape{
 		return this.c;
 	}
 
-	public static void drawRectangle(Point p1, Point p2, Color c2, Graphics g) {
+	public static void drawRectangle(Point p1, Point p2, Color c2, Graphics g, String drawingType) {
 		int x1 = p1.x;
 		int y1 = p1.y;
 		
@@ -112,7 +118,11 @@ public class Rectangle implements Shape{
 		int x = Math.min(x1, x2);
 		int y = Math.min(y1, y2);
 		g.setColor(c2);
-		g.drawRect(x, y, width, height);
+		
+		if(drawingType.equals(ToolsMenu.OUTLINE))
+			g.drawRect(x, y, width, height);
+		else
+			g.fillRect(x, y, width, height);
 	}
 
 }

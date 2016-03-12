@@ -33,7 +33,8 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	private JButton colorSelect;
 	private JLabel strokeSizeLabel;
 	private JButton delete;
-	
+	private JLabel drawingTypeLabel;
+		
 	public static final String GRAB = "grab";
 	public static final String DOT = "dot";
 	public static final String LINE = "line"; 
@@ -43,16 +44,26 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	public static final String COLORFILL = "colorFill";
 	public static final String COLORSELECT = "colorSelect";
 	public static final String DELETE = "delete";
+	public static final String OUTLINE = "outline";
+	public static final String SOLID = "solid";
+	public static final String DRAWING_TYPE_COMBOBOX = "drawingTypeSelect";
+	public static String DRAWING_TYPE = ToolsMenu.OUTLINE;
 	
 	private static String selectedChoice = "none";
-	private static Vector<Integer> STROKESIZES;
+	private static Vector<Integer> strokeSizes;
+	private static Vector<String> drawingTypes;
 	
 	private static JComboBox<Integer> brushStrokeSize;
+	private static JComboBox<String> drawingType;
 	
 	public ToolsMenu () {
-		STROKESIZES = new Vector<Integer>();
+		strokeSizes = new Vector<Integer>();
 		for(int i = 10; i <= 36; i++)
-			STROKESIZES.addElement(i);
+			strokeSizes.addElement(i);
+		
+		drawingTypes = new Vector<String>();
+		drawingTypes.add(ToolsMenu.OUTLINE);
+		drawingTypes.add(ToolsMenu.SOLID);
 		
 		toolBox = new JToolBar("Tools",JToolBar.VERTICAL);
 			
@@ -69,12 +80,22 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		strokeSizeLabel = new JLabel("Size");
 		strokeSizeLabel.setAlignmentX(CENTER_ALIGNMENT);
 		
-		brushStrokeSize = new JComboBox<Integer>(STROKESIZES);
+		brushStrokeSize = new JComboBox<Integer>(strokeSizes);
 		brushStrokeSize.setSelectedIndex(0);
 		brushStrokeSize.addActionListener(this);
 		brushStrokeSize.setMaximumSize(new Dimension(52, 52));
 		brushStrokeSize.setAlignmentX(CENTER_ALIGNMENT);
-			
+		
+		drawingTypeLabel = new JLabel("Type");
+		drawingTypeLabel.setAlignmentX(CENTER_ALIGNMENT);
+		
+		drawingType =  new JComboBox<String>(drawingTypes);
+		drawingType.setSelectedIndex(0);
+		drawingType.addActionListener(this);
+		drawingType.setActionCommand(ToolsMenu.DRAWING_TYPE_COMBOBOX);
+		drawingType.setMaximumSize(new Dimension(72, 52));
+		drawingType.setAlignmentX(CENTER_ALIGNMENT);
+					
 		toolBox.add(grab);
 		toolBox.add(dot);
 		toolBox.add(line);
@@ -86,6 +107,8 @@ public class ToolsMenu extends JPanel implements ActionListener{
 		toolBox.add(delete);
 		toolBox.add(strokeSizeLabel);
 		toolBox.add(brushStrokeSize);
+		toolBox.add(drawingTypeLabel);
+		toolBox.add(drawingType);
 		
 		toolBox.setFloatable(false);
 		toolBox.setBorderPainted(false);
@@ -114,11 +137,18 @@ public class ToolsMenu extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		String command = event.getActionCommand();
-	    setSelectedChoice(command);
+	    
 	    if(command.equals("colorSelect")){
 	    	Color newColor = JColorChooser.showDialog(null, "Choose a color", Canvas.c);
             Canvas.c = newColor;
+            setSelectedChoice(command);
+	    }else if(command.equals(ToolsMenu.DRAWING_TYPE_COMBOBOX)){
+	    	ToolsMenu.DRAWING_TYPE = (String)drawingType.getSelectedItem();
+	    }else{
+	    	setSelectedChoice(command);
 	    }
+	    
+	    
 	}
 	
 	private static void setSelectedChoice(String choice){

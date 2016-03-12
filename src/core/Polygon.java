@@ -16,8 +16,9 @@ public class Polygon implements Shape{
 	Color c;
 	int id;
 	int type;
+	String bodyType;
 
-	public Polygon(ArrayList<Integer> xArray, ArrayList<Integer> yArray, Color c) {
+	public Polygon(ArrayList<Integer> xArray, ArrayList<Integer> yArray, Color c, String bodyType) {
 
 		this.xArray = getIntArray(xArray);
 		this.yArray = getIntArray(yArray);
@@ -25,6 +26,7 @@ public class Polygon implements Shape{
 		this.c = c;
 		id = nextId.incrementAndGet();
 		type = DrawnObjects.POLYGON;
+		this.bodyType = bodyType;
 	}
 
 	public static int [] getIntArray(ArrayList<Integer> array){
@@ -38,7 +40,10 @@ public class Polygon implements Shape{
 	@Override
 	public void draw(Graphics g){
 		g.setColor(this.c);
-		g.drawPolygon(xArray, yArray, n);
+		if(bodyType.equals(ToolsMenu.OUTLINE))
+			g.drawPolygon(xArray, yArray, n);
+		else
+			g.fillPolygon(xArray, yArray, n);
 	}
 
 	@Override
@@ -106,12 +111,17 @@ public class Polygon implements Shape{
 		return this.c;
 	}
 
-	public static void drawPolygon(ArrayList<Integer> array1, ArrayList<Integer> array2, Color c2, Graphics g) {
+	public static void drawPolygon(ArrayList<Integer> array1, ArrayList<Integer> array2, Color c2, Graphics g, String drawingType) {
 		int[] xArray = getIntArray(array1);
 		int[] yArray = getIntArray(array2);
 		int n = array1.size();
 
 		g.setColor(c2);
-		g.drawPolygon(xArray, yArray, n);
+		
+		if(drawingType.equals(ToolsMenu.OUTLINE) || n < 3)
+			g.drawPolygon(xArray, yArray, n);
+		else
+			g.fillPolygon(xArray, yArray, n);
+		
 	}
 }

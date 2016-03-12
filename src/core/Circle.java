@@ -21,8 +21,9 @@ public class Circle implements Shape {
 	int id;
 	int type;
 	double r;
+	String bodyType;
 	
-	public Circle(Point s, Point e, Color c) {
+	public Circle(Point s, Point e, Color c, String bodyType) {
 		this.x1 = s.x;
 		this.y1 = s.y;
 		
@@ -40,12 +41,16 @@ public class Circle implements Shape {
 		this.c = c;
 		id = nextId.incrementAndGet();
 		type = DrawnObjects.CIRCLE;
+		this.bodyType = bodyType;
 	}
 	
 	@Override
 	public void draw(Graphics g){
 		g.setColor(this.c);
-		g.drawOval(this.x, this.y, this.width, this.height);
+		if(bodyType.equals(ToolsMenu.OUTLINE))
+			g.drawOval(x, y, width, height);
+		else
+			g.fillOval(x, y, width, height);	
 	}
 	
 	@Override
@@ -90,7 +95,7 @@ public class Circle implements Shape {
 		return this.c;
 	}
 
-	public static void drawCircle(Point p1, Point p2, Color c2, Graphics g) {
+	public static void drawCircle(Point p1, Point p2, Color c2, Graphics g, String drawingType) {
 		int x1 = p1.x;
 		int y1 = p1.y;
 		
@@ -105,6 +110,10 @@ public class Circle implements Shape {
 		int height = (int) (2 * r);
 		int width = (int) (2 * r);
 		g.setColor(c2);
-		g.drawOval(x, y, width, height);
+		
+		if(drawingType.equals(ToolsMenu.OUTLINE))
+			g.drawOval(x, y, width, height);
+		else
+			g.fillOval(x, y, width, height);		
 	}
 }
