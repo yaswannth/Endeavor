@@ -24,6 +24,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 	private String selectedTool;
 	public static Color c;
 	private Shape selectedShape;
+	private Shape nearestShape = null;
 	private static boolean movingObject = false;
 	private static boolean drawingObject = false;
 	private ArrayList<Integer> xArray = new ArrayList<Integer>();
@@ -102,6 +103,14 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 				this.setCursor(Cursors.getCurrentCursor(ToolsMenu.GRAB));
 			}
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
+			nearestShape = drawnObjects.getNearestObjects(startPoint);
+			if(nearestShape != null){
+				if(nearestShape.getType() == DrawnObjects.DOT){
+					int x = ((Vertex)nearestShape).x;
+					int y = ((Vertex)nearestShape).y;
+					startPoint = new Point(x,y);
+				}
+			}
 			drawingObject = true;
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
 			drawingObject = true;
@@ -149,6 +158,18 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			movingObject = false;
 		}else if(selectedTool.equals(ToolsMenu.LINE)) {
 			drawingObject = false;
+			nearestShape = drawnObjects.getNearestObjects(currentPoint);
+			System.out.println(currentPoint.x + " " + currentPoint.y);
+			if(nearestShape != null){
+				if(nearestShape.getType() == DrawnObjects.DOT){
+					System.out.println("dot");
+					int x = ((Vertex)nearestShape).x;
+					int y = ((Vertex)nearestShape).y;
+					
+					currentPoint = new Point(x,y);
+				}
+			}
+			System.out.println(currentPoint.x + " " + currentPoint.y);
 			Line line = new Line(startPoint, currentPoint, c);
 			drawnObjects.shapes.add(line);
 		}else if(selectedTool.equals(ToolsMenu.RECTANGLE)) {
@@ -205,7 +226,7 @@ public class Canvas extends JPanel implements MouseListener, MouseMotionListener
 			tmpYArray.clear();
 
 		}
-		
+
 		if(!Canvas.drawingObject && !xArray.isEmpty() && selectedTool.equals(ToolsMenu.POLYGON)){
 			Polygon.drawPolygon(xArray, yArray, Canvas.c, g, ToolsMenu.DRAWING_TYPE);
 		}
