@@ -30,7 +30,7 @@ public class ArtGeo extends JFrame{
 		setUIFont(new FontUIResource(font));		
 		appIcon = new ImageIcon((URL)ArtGeo.class.getResource("/res/EndeavorIcon.png"));
 		
-		mainMenuPane = new MainMenu(new BorderLayout());
+		mainMenuPane = new MainMenu(new BorderLayout(), this);
 		toolsMenuPane = new ToolsMenu();
 		toolsMenuPane.setLayout(new BoxLayout(toolsMenuPane, BoxLayout.Y_AXIS));
 		coordinatesPane = new CoordinatesSection();
