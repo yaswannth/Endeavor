@@ -4,12 +4,18 @@ import java.awt.Color;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -53,14 +59,13 @@ public class MainMenu extends JPanel implements ActionListener{
 		saveFile.setActionCommand("Save File");
 		clearAll.setActionCommand("Clear All");
 		about.setActionCommand("About");
+		exit.setActionCommand("Exit");
 
 		openFile.addActionListener(this);
 		saveFile.addActionListener(this);
 		clearAll.addActionListener(this);
 		about.addActionListener(this);
-
-
-		exit.setActionCommand("Exit");
+		exit.addActionListener(this);		
 
 		fileMenu.add(openFile);
 		fileMenu.add(saveFile);
@@ -80,12 +85,39 @@ public class MainMenu extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent event) {
+		if (event.getActionCommand().equals("Exit")) {
+			Object[] options = {"Yes","No"};
+			String warning = "Do you want to save your work?";
+			if(Canvas.drawnObjects.shapes.size() > 0) {
+				int option = JOptionPane.showOptionDialog(window, warning, "!", JOptionPane.YES_NO_OPTION, 
+						JOptionPane.QUESTION_MESSAGE, null,options,options[1]);
+				if(option == 1)
+					System.exit(0);
+		
+			}
+		}
+		if (event.getActionCommand().equals("Clear All")) {
+			Canvas.xArray.clear();
+			Canvas.yArray.clear();
+			Canvas.drawnObjects.shapes.clear();
+			window.refresh();
+		}
 		if (event.getActionCommand().equals("Save File")) {
-			int returnVal = fileWindow.showOpenDialog(window);
+			int returnVal = fileWindow.showDialog(window, "Save");
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String filePath = fileWindow.getSelectedFile().getAbsolutePath();
 				if (!filePath.endsWith(".eps"))
-					filePath = filePath + ".eps";
+					filePath = filePath + ".eps";				
+				try
+				{
+					FileWriter fileWriter = new FileWriter(new File(filePath));
+					fileWriter.write(Canvas.drawnObjects.getData());					
+					fileWriter.close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -93,6 +125,22 @@ public class MainMenu extends JPanel implements ActionListener{
 			int returnVal = fileWindow.showOpenDialog(window);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
 				String filePath = fileWindow.getSelectedFile().getAbsolutePath();
+				if (filePath == "" || !filePath.endsWith(".eps"))
+				{
+					JOptionPane.showMessageDialog(window, "Format not supported!");
+					//return;
+				}else{
+					try {
+						BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(filePath)));
+						Canvas.drawnObjects.loadData(bufferedReader);
+						window.refresh();
+						bufferedReader.close();
+					} catch (FileNotFoundException e) {
+						JOptionPane.showMessageDialog(window, "File not found!");
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(window, "File cannot be read!");
+					}
+				}
 			}
 		}
 	}

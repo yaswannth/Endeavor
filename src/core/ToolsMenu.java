@@ -136,6 +136,7 @@ public class ToolsMenu extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		Canvas.toolChange = true;
 		String command = event.getActionCommand();
 	    
 	    if(command.equals("colorSelect")){

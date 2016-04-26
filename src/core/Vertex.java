@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.HashSet;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Vertex implements Shape{
@@ -14,7 +16,7 @@ public class Vertex implements Shape{
 	Color c;
 	int id;
 	int type;
-	private int r = 6;
+	private static final int RADIUS = 6;
 	
 	public Vertex(Point p, Color c) {
 		this.x = p.x;
@@ -24,10 +26,14 @@ public class Vertex implements Shape{
 		type = DrawnObjects.DOT;
 	}
 	
+	public static int getRadius(){
+		return RADIUS;
+	}
+	
 	@Override
 	public void draw(Graphics g){
 		g.setColor(this.c);
-		g.fillOval(this.x - r, this.y - r, 2*r, 2*r);		
+		g.fillOval(this.x - RADIUS, this.y - RADIUS, 2*RADIUS, 2*RADIUS);		
 	}
 	
 	@Override
@@ -68,5 +74,66 @@ public class Vertex implements Shape{
 	public Color getColor(){
 		return this.c;
 	}
+
+	@Override
+	public float[] getRGB()
+	{
+		float[] rgb = new float[3];		
+		rgb[0] = ((float)c.getRed()) / MAX_COLOR;
+		rgb[1] = ((float)c.getGreen()) / MAX_COLOR;
+		rgb[2] = ((float)c.getBlue()) / MAX_COLOR;
+		return rgb;
+	}
 	
+	@Override
+	public String getShapeScript(int ury) {
+		StringBuffer sb = new StringBuffer();
+
+		float[] rgb = getRGB();
+		float rIntensity = rgb[0];
+		float gIntensity = rgb[1];
+		float bIntensity = rgb[2];
+
+		sb.append("%vertex" + "\n");
+		sb.append(this.x + " " + (ury - this.y) + " " + rIntensity + " " + gIntensity + " " + bIntensity + " " + "vertex" + "\n");
+		
+		return sb.toString();
+	}
+
+	public static Vertex getVertex(String script, int ury) {
+		Scanner scanner = new Scanner(script);
+		String input = scanner.nextLine();
+		StringTokenizer inputTokens = new StringTokenizer(input);
+
+
+		int x = Integer.parseInt(inputTokens.nextToken());
+		int y = ury - Integer.parseInt(inputTokens.nextToken());
+		
+		float r = Float.parseFloat(inputTokens.nextToken());
+		float g = Float.parseFloat(inputTokens.nextToken());
+		float b = Float.parseFloat(inputTokens.nextToken());
+		scanner.close();
+		
+		return new Vertex(new Point(x,y), new Color(r,g,b));
+	}
+	
+	@Override
+	public int getMinX() {
+		return x - RADIUS;
+	}
+
+	@Override
+	public int getMinY(int ury) {
+		return ury - (y + RADIUS);
+	}
+
+	@Override
+	public int getMaxX() {
+		return x + RADIUS;
+	}
+
+	@Override
+	public int getMaxY() {
+		return y + RADIUS;
+	}
 }

@@ -4,16 +4,21 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Polygon implements Shape{
 	static AtomicInteger nextId = new AtomicInteger();
 	HashSet<Point> vertexPoints;
-	public int [] xArray;
-	public int [] yArray;
+	private int[] xArray;
+	private int[] yArray;
+	private int[] sortedXArray;
+	private int[] sortedYArray;
 	public int n;//Number of vertices
-	Color c;
+	private Color c;
 	int id;
 	int type;
 	String bodyType;
@@ -22,7 +27,15 @@ public class Polygon implements Shape{
 
 		this.xArray = getIntArray(xArray);
 		this.yArray = getIntArray(yArray);
+		
+		
 		this.n = xArray.size();
+		
+		this.sortedXArray = Arrays.copyOf(this.xArray,this.n);
+		this.sortedYArray = Arrays.copyOf(this.yArray,this.n);
+		
+		Arrays.sort(this.sortedXArray);
+		Arrays.sort(this.sortedYArray);
 		this.c = c;
 		id = nextId.incrementAndGet();
 		type = DrawnObjects.POLYGON;
@@ -117,11 +130,114 @@ public class Polygon implements Shape{
 		int n = array1.size();
 
 		g.setColor(c2);
-		
 		if(drawingType.equals(ToolsMenu.OUTLINE) || n < 3)
 			g.drawPolygon(xArray, yArray, n);
 		else
 			g.fillPolygon(xArray, yArray, n);
 		
+	}
+	
+	public static Polygon getPolygon(String script, int ury){
+		ArrayList<Integer> xarray = new ArrayList<Integer>();
+		ArrayList<Integer> yarray = new ArrayList<Integer>();
+		Color polyColor;
+		String polyBodyType;
+		
+		Scanner scanner = new Scanner(script);
+		String input = scanner.nextLine();
+		StringTokenizer inputTokens;
+		
+		while(!(input = scanner.nextLine()).startsWith("closepath")){
+			inputTokens = new StringTokenizer(input);
+			xarray.add(new Integer(inputTokens.nextToken()));
+			yarray.add(new Integer(ury - Integer.parseInt(inputTokens.nextToken())));
+		}
+		input = scanner.nextLine();	
+		if(input.endsWith("gsave")){
+			polyBodyType = ToolsMenu.SOLID;	
+			input = scanner.nextLine();
+		}
+		else{
+			polyBodyType = ToolsMenu.OUTLINE;			
+		}
+		
+		
+		inputTokens = new StringTokenizer(input);
+		float r = Float.parseFloat(inputTokens.nextToken());
+		float g = Float.parseFloat(inputTokens.nextToken());
+		float b = Float.parseFloat(inputTokens.nextToken());
+		polyColor = new Color(r, g, b);
+		
+		System.out.println("reached end");
+		scanner.close();
+
+		return new Polygon(xarray, yarray, polyColor, polyBodyType);		
+	}
+
+	@Override
+	public String getShapeScript(int ury) {
+		StringBuffer sb = new StringBuffer();
+
+		float[] rgb = getRGB();
+		float rIntensity = rgb[0];
+		float gIntensity = rgb[1];
+		float bIntensity = rgb[2];
+
+		sb.append("%polygon" + "\n");
+		sb.append("newpath\n");
+		sb.append(this.xArray[0] + " " + (ury - this.yArray[0]) + " " + "moveto" + "\n");
+		System.out.println(ury);
+		for (int i = 1; i < n; i++)
+		{
+			int x1 = this.xArray[i];
+			int y1 = ury - this.yArray[i];
+			sb.append(x1 + " " + y1 + " " + "lineto" + "\n");
+		}
+
+		if(bodyType.equals(ToolsMenu.SOLID)) {
+			sb.append("closepath\n");
+			sb.append("gsave\n");
+			sb.append(rIntensity + " " + gIntensity + " " + bIntensity + " " + "setrgbcolor" + " " + "fill\n");
+			sb.append("grestore\n");
+			sb.append("stroke\n");
+			
+		}else{
+			sb.append("closepath\n");
+			sb.append(rIntensity + " " + gIntensity + " " + bIntensity + " " + "setrgbcolor" + " " + "stroke\n");
+		}
+		
+
+		return sb.toString();
+	}
+
+	@Override
+	public float[] getRGB()
+	{
+		float[] rgb = new float[3];		
+		rgb[0] = ((float)c.getRed()) / MAX_COLOR;
+		rgb[1] = ((float)c.getGreen()) / MAX_COLOR;
+		rgb[2] = ((float)c.getBlue()) / MAX_COLOR;
+		return rgb;
+	}
+
+	@Override
+	public int getMinX() {
+		return this.sortedXArray[0];
+	}
+
+	@Override
+	public int getMinY(int ury) {
+		return ury - this.sortedYArray[this.n - 1];
+	}
+
+	@Override
+	public int getMaxX() {
+		System.out.println(this.sortedXArray[this.n - 1]);
+		return this.sortedXArray[this.n - 1];
+	}
+
+	@Override
+	public int getMaxY() {
+		return this.sortedYArray[this.n -1];
 	}
 }

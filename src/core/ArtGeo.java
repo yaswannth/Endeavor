@@ -45,6 +45,7 @@ public class ArtGeo extends JFrame{
 		getContentPane().add(toolsMenuPane,BorderLayout.WEST);
 		getContentPane().add(coordinatesPane, BorderLayout.SOUTH);
 		getContentPane().add(canvasPane, BorderLayout.CENTER);
+		
 		setVisible(true);	
 		setResizable(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);		
@@ -61,6 +62,13 @@ public class ArtGeo extends JFrame{
 		}
 	}
 	
+	public void refresh(){
+		canvasPane.repaint();
+	}
+	
+	public void showWarning(String warning){
+		JOptionPane.showMessageDialog(this,warning);
+	}
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
